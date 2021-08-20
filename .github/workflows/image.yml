@@ -1,0 +1,18 @@
+name: Build our image
+
+on:
+  push:
+    branches: main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+      - name: login to docker hub
+        run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USER }}" --password-stdin
+      - name: build the image
+        run: docker build -t lukakiro/buildx .
+      - name: push the image
+        run: docker push lukakiro/buildx
